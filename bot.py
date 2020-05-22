@@ -26,7 +26,7 @@ async def ping(ctx):
     await ctx.send(f"The ping of this bot is {ping} ms")
 
 @bot.command()
-async def weather(ctx, City: str):
+async def weather(ctx, *, City):
     complete_url = base_url + "appid=" + api_key + "&q=" + City
     response = requests.get(complete_url)
     x = response.json()
@@ -37,16 +37,30 @@ async def weather(ctx, City: str):
         current_humidiy = y["humidity"] 
         z = x["weather"] 
         weather_description = z[0]["description"] 
-        await ctx.send(" Temperature (in kelvin unit) = " +
-                        str(current_temperature) + 
-                        "\n atmospheric pressure (in hPa unit) = " +
-                        str(current_pressure) +
-                        "\n humidity (in percentage) = " +
-                        str(current_humidiy) +
-                        "\n description = " +
-                        str(weather_description)) 
-  
+
+        embed = discord.Embed(
+            title= str(City),
+            color= 0xADD8E6)
+        embed.set_author(
+            name="OpenWeatherMap", url="https://www.openweathermap.org")
+        embed.set_thumbnail(url ="https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png")
+        faren = (current_temperature-273.15)*9/5+32
+        embed.add_field(
+            name="Temperature",
+            value=str(format(round(current_temperature - 273.15, 2))) + "°C" +" / " + str(format(round(faren, 2))) + "°F",
+            inline=False)
+        embed.add_field(
+            name="Atmospheric Pressure",
+            value=str(current_pressure) + " hPa",
+            inline=False)
+        embed.add_field(
+            name="Humidity", value=str(current_humidiy) + "%", inline=False)
+        embed.add_field(
+            name="Description",
+            value=str(weather_description),
+            inline=False)
+        await ctx.send(embed=embed)
     else: 
-        print(" City Not Found ") 
+        await ctx.send("City Not Found ") 
 
 bot.run(token)
