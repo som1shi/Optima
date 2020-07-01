@@ -1,13 +1,14 @@
 import discord
 from discord.ext import commands
 
+
 import random
 import time
 import asyncio
 import requests, json 
+import re
 
 from newsapi import NewsApiClient
-
 
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
@@ -64,8 +65,7 @@ async def weather(ctx, *, City):
     else: 
         await ctx.send("City Not Found ") 
 
-@bot.command()
-async def newsed(ctx):
+
     bbc = Newscatcher(website = 'https://www.bbc.com')
     results = bbc.get_news()
     bbcArticles = results['articles']
@@ -101,8 +101,71 @@ async def newsed(ctx):
 
 @bot.command()
 async def news(ctx, *keyword):
+
     if keyword:
-        await ctx.send("WORK IN PROGRESS")
+        keyword = str(keyword)
+        keyword = re.sub(r'[()]', '', keyword)
+        keyword = keyword.replace("'", "")
+        keyword = keyword.replace(",", "")
+        category = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
+
+        if keyword in category:
+            news = newsapi.get_everything(category = )
+        else: 
+            news = newsapi.get_everything(q = keyword, 
+                                        sort_by='relevancy')
+            Articles = news['articles']
+
+            embed = discord.Embed(
+                title= str(Articles[0]['title']), 
+                url = Articles[0]['url'],
+                description=str(Articles[0]['description']),
+                color= 0xFF0000)
+            embed.set_author(
+                name= Articles[0]['author'])
+            embed.set_thumbnail(url = Articles[0]['urlToImage'])
+            await ctx.send(embed=embed)
+
+            embed = discord.Embed(
+                title= str(Articles[1]['title']), 
+                url = Articles[1]['url'],
+                description=str(Articles[1]['description']),
+                color= 0xFF0000)
+            embed.set_author(
+                name= Articles[1]['author'])
+            embed.set_thumbnail(url = Articles[1]['urlToImage'])
+            await ctx.send(embed=embed)
+
+            embed = discord.Embed(
+                title= str(Articles[2]['title']), 
+                url = Articles[2]['url'],
+                description=str(Articles[2]['description']),
+                color= 0xFF0000)
+            embed.set_author(
+                name= Articles[2]['author'])
+            embed.set_thumbnail(url = Articles[2]['urlToImage'])
+            await ctx.send(embed=embed)
+
+            embed = discord.Embed(
+                title= str(Articles[3]['title']), 
+                url = Articles[3]['url'],
+                description=str(Articles[3]['description']),
+                color= 0xFF0000)
+            embed.set_author(
+                name= Articles[3]['author'])
+            embed.set_thumbnail(url = Articles[3]['urlToImage'])
+            await ctx.send(embed=embed)
+
+            embed = discord.Embed(
+                title= str(Articles[4]['title']), 
+                url = Articles[4]['url'],
+                description=str(Articles[4]['description']),
+                color= 0xFF0000)
+            embed.set_author(
+                name= Articles[4]['author'])
+            embed.set_thumbnail(url = Articles[4]['urlToImage'])
+            await ctx.send(embed=embed)
+
     else:
         sources = 'bbc-news, al-jazeera-english'
         topHeadlines = newsapi.get_top_headlines(sources= sources)
