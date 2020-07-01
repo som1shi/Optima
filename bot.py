@@ -103,7 +103,7 @@ async def weather(ctx, *, City):
 
 @bot.command()
 async def news(ctx, *keyword):
-
+    sources = 'bbc-news, al-jazeera-english, bbc-sport, bleacher-report, cnn, espn, fox-news, google-news, independent, national-geographic, reuters'
     if keyword:
         keyword = str(keyword)
         keyword = re.sub(r'[()]', '', keyword)
@@ -112,7 +112,7 @@ async def news(ctx, *keyword):
         category = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
 
         if keyword in category:
-            news = newsapi.get_top_headlines(category = keyword)
+            news = newsapi.get_top_headlines(category = keyword, language='en', country= 'us, gb')
             Articles = news['articles']
 
             embed = discord.Embed(
@@ -166,7 +166,7 @@ async def news(ctx, *keyword):
             await ctx.send(embed=embed)
         else: 
             news = newsapi.get_everything(q = keyword, 
-                                        sort_by='relevancy')
+                                        sort_by='relevancy', sources= sources)
             Articles = news['articles']
 
             embed = discord.Embed(
@@ -220,7 +220,6 @@ async def news(ctx, *keyword):
             await ctx.send(embed=embed)
 
     else:
-        sources = 'bbc-news, al-jazeera-english'
         topHeadlines = newsapi.get_top_headlines(sources= sources)
         Articles = topHeadlines['articles']
 
