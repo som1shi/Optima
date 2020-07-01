@@ -8,6 +8,8 @@ import asyncio
 import requests, json 
 import re
 
+from google_currency import convert as conv
+
 from newsapi import NewsApiClient
 
 
@@ -149,6 +151,7 @@ async def news(ctx, *keyword):
                 title= str(Articles[3]['title']), 
                 url = Articles[3]['url'],
                 description=str(Articles[3]['description']),
+
                 color= 0xFF0000)
             embed.set_author(
                 name= Articles[3]['author'])
@@ -272,5 +275,31 @@ async def news(ctx, *keyword):
             name= Articles[4]['author'])
         embed.set_thumbnail(url = Articles[4]['urlToImage'])
         await ctx.send(embed=embed)
+
+@bot.command()
+async def convert(ctx, *currLoad):
+    currLoad = str(currLoad)
+    currLoad = re.sub(r'[()]', '', currLoad)
+    currLoad = currLoad.replace("'", "")
+    currLoad = currLoad.replace(",", "")
+    currVar = currLoad.split()
+
+    if len(currVar) == 3:
+        currConv = conv(currVar[1], currVar[2], int(currVar[0]))
+
+        currConv = json.loads(currConv)
+        sendSyx = str(currVar[0]) + ' ' + currConv['from'] + " is equivalent to " + currConv['amount'] + ' ' + currConv['to']
+        await ctx.send(sendSyx)
+
+
+    elif len(currVar) ==4:
+        currConv= conv(currVar[1], currVar[3], int(currVar[0]))
+
+        currConv = json.loads(currConv)
+        sendSyx = str(currVar[0]) + ' ' + currConv['from'] + " is equivalent to " + currConv['amount'] + ' ' + currConv['to']
+        await ctx.send(sendSyx)
+
+    else:
+        await ctx.send("Invalid Syntax")
 
 bot.run(token)
