@@ -6,10 +6,10 @@ import time
 import asyncio
 import requests, json 
 
+from newsapi import NewsApiClient
 
 
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
-
 
 description = '''All the daily info you need!'''
 
@@ -20,6 +20,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="The Weather Report"))
     print('The bot is active')
 
+
 @bot.command() #This command prints the ping of the bot
 async def ping(ctx):
     ping = round(bot.latency*1000)
@@ -27,7 +28,7 @@ async def ping(ctx):
 
 @bot.command()
 async def weather(ctx, *, City):
-    complete_url = base_url + "appid=" + api_key + "&q=" + City
+    complete_url = base_url + "appid=" + owm_key + "&q=" + City
     response = requests.get(complete_url)
     x = response.json()
     if x["cod"] != "404": 
@@ -62,5 +63,99 @@ async def weather(ctx, *, City):
         await ctx.send(embed=embed)
     else: 
         await ctx.send("City Not Found ") 
+
+@bot.command()
+async def newsed(ctx):
+    bbc = Newscatcher(website = 'https://www.bbc.com')
+    results = bbc.get_news()
+    bbcArticles = results['articles']
+    aSummary = bbcArticles[0]['summary']
+    aTitle = bbcArticles[0]['title']
+
+    embed = discord.Embed(
+        title= str("News"),
+        color= 0xADD8E6)
+    embed.set_author(
+        name="BBC", url="https://www.bbc.com/news")
+    embed.add_field(
+        name=str(bbcArticles[0]['title']),
+        value=str(bbcArticles[0]['summary']),
+        inline=False)
+    embed.add_field(
+        name=str(bbcArticles[1]['title']),
+        value=str(bbcArticles[1]['summary']),
+        inline=False)
+    embed.add_field(
+        name=str(bbcArticles[2]['title']),
+        value=str(bbcArticles[2]['summary']),
+        inline=False)
+    embed.add_field(
+        name=str(bbcArticles[3]['title']),
+        value=str(bbcArticles[3]['summary']),
+        inline=False)
+    embed.add_field(
+        name=str(bbcArticles[4]['title']),
+        value=str(bbcArticles[4]['summary']),
+        inline=False)
+    await ctx.send(embed=embed)
+
+@bot.command()
+async def news(ctx, *keyword):
+    if keyword:
+        await ctx.send("WORK IN PROGRESS")
+    else:
+        sources = 'bbc-news, al-jazeera-english'
+        topHeadlines = newsapi.get_top_headlines(sources= sources)
+        Articles = topHeadlines['articles']
+
+        embed = discord.Embed(
+            title= str(Articles[0]['title']), 
+            url = Articles[0]['url'],
+            description=str(Articles[0]['description']),
+            color= 0xFF0000)
+        embed.set_author(
+            name= Articles[0]['author'])
+        embed.set_thumbnail(url = Articles[0]['urlToImage'])
+        await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            title= str(Articles[1]['title']), 
+            url = Articles[1]['url'],
+            description=str(Articles[1]['description']),
+            color= 0xFF0000)
+        embed.set_author(
+            name= Articles[1]['author'])
+        embed.set_thumbnail(url = Articles[1]['urlToImage'])
+        await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            title= str(Articles[2]['title']), 
+            url = Articles[2]['url'],
+            description=str(Articles[2]['description']),
+            color= 0xFF0000)
+        embed.set_author(
+            name= Articles[2]['author'])
+        embed.set_thumbnail(url = Articles[2]['urlToImage'])
+        await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            title= str(Articles[3]['title']), 
+            url = Articles[3]['url'],
+            description=str(Articles[3]['description']),
+            color= 0xFF0000)
+        embed.set_author(
+            name= Articles[3]['author'])
+        embed.set_thumbnail(url = Articles[3]['urlToImage'])
+        await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            title= str(Articles[4]['title']), 
+            url = Articles[4]['url'],
+            description=str(Articles[4]['description']),
+            color= 0xFF0000)
+        embed.set_author(
+            name= Articles[4]['author'])
+        embed.set_thumbnail(url = Articles[4]['urlToImage'])
+        await ctx.send(embed=embed)
 
 bot.run(token)
