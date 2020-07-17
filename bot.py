@@ -13,7 +13,6 @@ from google_currency import convert as conv
 from newsapi import NewsApiClient
 
 
-
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
 description = '''All the daily info you need!'''
@@ -302,4 +301,37 @@ async def convert(ctx, *currLoad):
     else:
         await ctx.send("Invalid Syntax")
 
+
+@bot.command()
+async def help(ctx):
+  embed = discord.Embed(
+    title= "OptimaBot Commands",
+    color= 0000000)
+  embed.set_author( name= "By SlumberousCarp2#7916")
+
+  embed.add_field(
+    name="News",
+    value= '`!!news` \n This shows you the top 5 headlines of the hour \n `!!news <category>` \n This commands shows you the top headlines in the category of your choice. The Categories are: `business`, `entertainment`, `general`, `health`, `science`, `sports`, and `technology`. \n `!!news <keyword>` \n This command shows you the top 5 headlines for any given keyword of your choice',
+    inline=False)
+
+  embed.add_field(
+    name="Weather",
+    value= '`!!weather <City>` \n This command tells you the weather in the a cetain city',
+    inline=False)
+
+  embed.add_field(
+    name="Currency",
+    value= '`!!convert <amount> <oldcurrency> <newcurrency>` \n This command helps you convert between currencies',
+    inline=False)
+
+  embed.add_field(
+    name="Ping",
+    value= '`!!ping` \n This shows the connection ping between the discord server and the bot host',
+    inline=False)
+  await ctx.send(embed=embed)
+
 bot.run(token)
+
+
+
+
