@@ -30,40 +30,81 @@ async def ping(ctx):
     ping = round(bot.latency*1000)
     await ctx.send(f"The ping of this bot is {ping} ms")
 
+
 @bot.command()
 async def weather(ctx, *, City):
-    complete_url = base_url + "appid=" + owm_key + "&q=" + City
+    complete_url = base_url + "appid=" + api_key + "&q=" + City
     response = requests.get(complete_url)
     x = response.json()
     if x["cod"] != "404": 
         y = x["main"] 
-        current_temperature = y["temp"] 
+        current_temperature = str(round(y["temp"]-273.15,2))
         current_pressure = y["pressure"] 
-        current_humidiy = y["humidity"] 
+        current_humidiy = y["humidity"]
+        min_temp = format(round(y["temp_min"]-273.15,2))
+        max_temp = format(round(y["temp_max"]-273.15,2))
+        feels_like = format(round(y["feels_like"]-273.15,2))
         z = x["weather"] 
+        icon = z[0]["icon"]
         weather_description = z[0]["description"] 
+        weather_main = z[0]["main"] 
+        w = x["wind"]
+        wind = w["speed"]
+        wind_deg = w["deg"]
+
+        def faren(tem):
+          tem = float(tem)
+          return str(round(tem*9/5+32,2))
+
+        def degDir(d):
+          dirs = ['N', 'N/NE', 'NE', 'E/NE', 'E', 'E/SE', 'SE', 'S/SE', 'S', 'S/SW', 'SW', 'W/SW', 'W', 'W/NW', 'NW', 'N/NW']
+          ix = round(d / (360. / len(dirs)))
+          return dirs[ix % len(dirs)]
+
 
         embed = discord.Embed(
             title= str(City),
             color= 0xADD8E6)
         embed.set_author(
             name="OpenWeatherMap", url="https://www.openweathermap.org")
-        embed.set_thumbnail(url ="https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png")
-        faren = (current_temperature-273.15)*9/5+32
+        embed.set_thumbnail(url = str("http://openweathermap.org/img/w/" + icon + ".png"))
+
         embed.add_field(
             name="Temperature",
-            value=str(format(round(current_temperature - 273.15, 2))) + "°C" +" / " + str(format(round(faren, 2))) + "°F",
-            inline=False)
+            value= current_temperature + "°C / " + str(faren(current_temperature)) + "°F",
+            inline=True)
+        
+        embed.add_field(
+            name="Feels Like",
+            value=feels_like + "°C / " + str(faren(feels_like)) + "°F",
+            inline=True)
+
+        embed.add_field(
+            name="Wind",
+            value=str(wind) + " mph " + str(degDir(wind_deg)),inline=True)
+
+        embed.add_field(
+            name="Minimum Temperature",
+            value=min_temp + "°C / " + str(faren(min_temp)) + "°F",
+            inline=True)
+        
+        embed.add_field(
+            name="Maximum Temperature",
+            value=max_temp + "°C / " + str(faren(max_temp)) + "°F",
+            inline=True)
+            
+        embed.add_field(
+            name="Humidity", value= str(current_humidiy) + "%", inline=True)
+
         embed.add_field(
             name="Atmospheric Pressure",
-            value=str(current_pressure) + " hPa",
-            inline=False)
-        embed.add_field(
-            name="Humidity", value=str(current_humidiy) + "%", inline=False)
+            value= str(current_pressure) + " hPa",
+            inline=True)
+          
         embed.add_field(
             name="Description",
-            value=str(weather_description),
-            inline=False)
+            value=weather_main + ": " + weather_description,inline=True)
+
         await ctx.send(embed=embed)
     else: 
         await ctx.send("City Not Found ") 
