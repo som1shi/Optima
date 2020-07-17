@@ -17,7 +17,7 @@ base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
 description = '''All the daily info you need!'''
 
-bot = commands.Bot('!', description=description)
+bot = commands.Bot('!!', description=description)
 
 @bot.event
 async def on_ready():
