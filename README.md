@@ -38,4 +38,4 @@ This shows the connection ping between the discord server and the bot host. The 
 
 
 ## Discord 
-We provide regular bot support at: [https://discord.gg/ThCM7FG](https://discord.gg/ThC
+We provide regular bot support at: [https://discord.gg/ThCM7FG](https://discord.gg/ThCM7FG)
