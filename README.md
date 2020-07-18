@@ -33,6 +33,10 @@ This command tells you the weather in the a cetain city. It uses data from a rep
 #### `!!convert <amount> <oldcurrency> <newcurrency>` 
 This command helps you convert between currencies using the google currency converter. The exchange rates used are always up to date with the rapidly changing currency exchange market.
 
+## Wikipedia
+#### `!!wiki <search>` 
+This command is a look up that looks up the search on wikipedia and provides a breif summary on it.
+
 ## Ping
 #### `!!ping` 
 This shows the connection ping between the discord server and the bot host. The bot is hosted in servers which good connection so ping should generally be below 100 at all times.
