@@ -1,6 +1,6 @@
 # Optima Bot
 
-Optima is the ultimate discord bot for your server. It can provide multiple types of information for you ranging from news to currency conversions. This bot was programmed with one main interest: to make information easily accessible to discord server. This bot can help in multiple ways: from telling you if the day is going to be rainy to giving you the latest updates on what is going around in the world.
+Optima is the ultimate discord bot for your server. It can provide multiple types of information for you ranging from news to currency conversions. This bot was programmed with one main interest: to make information easily accessible to discord server. This bot can help in multiple ways: from telling you if the day is going to be rainy to giving you the latest updates on what is going around in the world. Invite it by using this link [here](https://discord.com/api/oauth2/authorize?client_id=713104528727080961&permissions=269482080&scope=bot).
 
 ### By SlumberousCarp2#7916
 
