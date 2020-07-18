@@ -8,6 +8,8 @@ import asyncio
 import requests, json 
 import re
 
+import wikipedia
+
 from google_currency import convert as conv
 
 from newsapi import NewsApiClient
@@ -18,6 +20,8 @@ base_url = "http://api.openweathermap.org/data/2.5/weather?"
 description = '''All the daily info you need!'''
 
 bot = commands.Bot('!!', description=description)
+
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():
@@ -342,6 +346,19 @@ async def convert(ctx, *currLoad):
     else:
         await ctx.send("Invalid Syntax")
 
+@bot.command()
+async def wiki(ctx, *search):
+  wp = wikipedia.page(str(search))
+  embed = discord.Embed(
+    title= wp.title,
+    color= 12370112,
+    url= wp.url)
+  embed.set_thumbnail(url = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/225px-Wikipedia-logo-v2.svg.png")
+
+  embed.add_field(
+    name= wp.title,
+    value= wikipedia.summary(str(search), sentences=2),inline = False)  
+  await ctx.send(embed=embed)
 
 @bot.command()
 async def help(ctx):
@@ -363,6 +380,11 @@ async def help(ctx):
   embed.add_field(
     name="Currency",
     value= '`!!convert <amount> <oldcurrency> <newcurrency>` \n This command helps you convert between currencies',
+    inline=False)
+
+  embed.add_field(
+    name="Wikipedia",
+    value= '`!!wiki <search>` \n This command is a look up that looks up the search on wikipedia and provides a breif summary on it',
     inline=False)
 
   embed.add_field(
