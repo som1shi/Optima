@@ -5,6 +5,7 @@ Optima is the ultimate discord bot for your server. It can provide multiple type
 ### By SlumberousCarp2#7916
 
 These are my socials: 
+
 [https://github.com/SlumberousCarp2](https://github.com/SlumberousCarp2)
 
 [https://www.reddit.com/u/slumberouscarp2](https://www.reddit.com/u/slumberouscarp2)
